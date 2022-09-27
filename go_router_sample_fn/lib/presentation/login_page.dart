@@ -1,9 +1,24 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
+import '../service/auth_service.dart';
+
+/// To avoid  "Do not use BuildContexts across async gaps.", 
+/// I use Stateful Widget.
+/// 
+/// "ja"
+/// 
+/// "Do not use BuildContexts across async gaps."を避けるために、
+/// Stateful Widgetを使っています。
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +26,11 @@ class LoginPage extends StatelessWidget {
         child: ElevatedButton(
           child: const Text('Login'),
           onPressed: () async {
-            await FirebaseAuth.instance.signInAnonymously();
+            await context.read<AuthService>().loginAnonymously();
+            if (!mounted) {
+              return;
+            }
+            context.go('/');
           },
         ),
       ),

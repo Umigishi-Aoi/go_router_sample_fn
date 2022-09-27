@@ -1,11 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:go_router_sample_fn/service/auth_service.dart';
+import 'package:provider/provider.dart';
 
 import '../const/constants.dart';
 import '../const/tab_item.dart';
 import 'color_detail_page.dart';
 
-class ColorsListPage extends StatelessWidget {
+/// To avoid  "Do not use BuildContexts across async gaps.",
+/// I use Stateful Widget.
+///
+/// "ja"
+///
+/// "Do not use BuildContexts across async gaps."を避けるために、
+/// Stateful Widgetを使っています。
+class ColorsListPage extends StatefulWidget {
   const ColorsListPage({
     super.key,
     required this.tabItem,
@@ -14,18 +23,27 @@ class ColorsListPage extends StatelessWidget {
   final TabItem tabItem;
 
   @override
+  State<ColorsListPage> createState() => _ColorsListPageState();
+}
+
+class _ColorsListPageState extends State<ColorsListPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          tabItem.name,
+          widget.tabItem.name,
         ),
-        backgroundColor: tabItem.color,
+        backgroundColor: widget.tabItem.color,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              await FirebaseAuth.instance.signOut();
+              await context.read<AuthService>().logout();
+              if (!mounted) {
+                return;
+              }
+              context.go('/login');
             },
           ),
         ],
@@ -38,7 +56,7 @@ class ColorsListPage extends StatelessWidget {
             final materialIndex =
                 materialIndices[index % materialIndices.length];
             return Container(
-              color: tabItem.color[materialIndex],
+              color: widget.tabItem.color[materialIndex],
               child: ListTile(
                 title: Text(
                   '$materialIndex',
@@ -49,8 +67,8 @@ class ColorsListPage extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute<ColorDetailPage>(
                       builder: (context) => ColorDetailPage(
-                        color: tabItem.color,
-                        title: tabItem.name,
+                        color: widget.tabItem.color,
+                        title: widget.tabItem.name,
                         materialIndex: materialIndex,
                       ),
                     ),
