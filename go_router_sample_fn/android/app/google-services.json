@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "660238440329",
+    "project_id": "go-router-sample-220927",
+    "storage_bucket": "go-router-sample-220927.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660238440329:android:5e68d9c8d47cf52fb93358",
+        "android_client_info": {
+          "package_name": "com.example.go_router_sample_fn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660238440329-8n4tbsquqjeohiulihrn3l4knk8strna.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfwK5iBq7767R6y7fA8r6hh90VYFg380o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660238440329-8n4tbsquqjeohiulihrn3l4knk8strna.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
