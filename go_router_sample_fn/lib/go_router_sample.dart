@@ -45,7 +45,7 @@ class _GoRouterSampleState extends State<GoRouterSample> {
       }
 
       if (loggingIn) {
-        return '/${TabItem.red.name}}';
+        return '/${TabItem.red.name}';
       }
 
       return null;
