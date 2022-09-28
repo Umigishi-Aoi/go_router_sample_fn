@@ -78,6 +78,13 @@ class _GoRouterSampleState extends State<GoRouterSample> {
                               ),
                             );
                           }
+                          if (!materialIndices.contains(materialIndex)) {
+                            return const Scaffold(
+                              body: Center(
+                                child: Text('There is no page.'),
+                              ),
+                            );
+                          }
                           materialIndex = int.parse(state.params['index']!);
                           return ColorDetailPage(
                             color: tabItem.color,
