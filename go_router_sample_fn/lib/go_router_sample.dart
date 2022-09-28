@@ -48,18 +48,13 @@ class _GoRouterSampleState extends State<GoRouterSample> {
         return '/${TabItem.red.name}}';
       }
 
-      TabItem.values.map((tabItem) {
-        if (state.subloc == '/${tabItem.name}') {
-          try {
-            int.parse(state.params['index']!);
-          } on Exception {
-            return '/${tabItem.name}';
-          }
-        }
-      });
-
       return null;
     },
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: Text('Error: ${state.error}'),
+      ),
+    ),
     routes: [
       ShellRoute(
         builder: (context, state, child) => HomePage(child: child),
@@ -72,11 +67,24 @@ class _GoRouterSampleState extends State<GoRouterSample> {
                     .map(
                       (index) => GoRoute(
                         path: ':index',
-                        builder: (context, state) => ColorDetailPage(
-                          color: tabItem.color,
-                          title: tabItem.name,
-                          materialIndex: int.parse(state.params['index']!),
-                        ),
+                        builder: (context, state) {
+                          int materialIndex;
+                          try {
+                            materialIndex = int.parse(state.params['index']!);
+                          } on Exception catch (e) {
+                            return Scaffold(
+                              body: Center(
+                                child: Text('Error: $e'),
+                              ),
+                            );
+                          }
+                          materialIndex = int.parse(state.params['index']!);
+                          return ColorDetailPage(
+                            color: tabItem.color,
+                            title: tabItem.name,
+                            materialIndex: materialIndex,
+                          );
+                        },
                       ),
                     )
                     .toList(),
