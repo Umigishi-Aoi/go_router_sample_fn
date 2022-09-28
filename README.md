@@ -1,4 +1,4 @@
-#GoRouter Sample
+# GoRouter Sample
 
 This is Flutter Sample Project for [GoRouter](https://github.com/flutter/packages/tree/main/packages/go_router).
 
