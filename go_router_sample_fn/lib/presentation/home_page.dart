@@ -1,55 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:go_router_sample_fn/const/tab_item.dart';
-import 'package:go_router_sample_fn/presentation/colors_list_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key, required this.child});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  TabItem _currentTab = TabItem.red;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: TabItem.values.indexOf(_currentTab),
-        children: const [
-          ColorsListPage(
-            tabItem: TabItem.red,
-          ),
-          ColorsListPage(
-            tabItem: TabItem.green,
-          ),
-          ColorsListPage(
-            tabItem: TabItem.blue,
-          ),
-        ],
-      ),
+      body: child,
       bottomNavigationBar: NavigationBar(
         destinations: TabItem.values.map((tabItem) {
           return NavigationDestination(
             icon: Icon(
               Icons.layers,
-              color: _colorTabMatching(tabItem),
+              color: _colorTabMatching(tabItem, context),
             ),
             label: tabItem.name,
           );
         }).toList(),
-        selectedIndex: TabItem.values.indexOf(_currentTab),
+        selectedIndex: _calculateSelectedIndex(context),
         onDestinationSelected: (index) {
-          setState(() {
-            _currentTab = TabItem.values[index];
-          });
+          _onItemTapped(index, context);
         },
       ),
     );
   }
 
-  Color _colorTabMatching(TabItem item) {
-    return _currentTab == item ? item.color : Colors.grey;
+  Color _colorTabMatching(TabItem item, BuildContext context) {
+    final route = GoRouter.of(context);
+    final location = route.location;
+    final currentTabItem = TabItem.values.firstWhere(
+      (tabItem) => location.contains('/${tabItem.name}'),
+      orElse: () => TabItem.red,
+    );
+    return currentTabItem == item ? item.color : Colors.grey;
+  }
+
+  static int _calculateSelectedIndex(BuildContext context) {
+    final route = GoRouter.of(context);
+    final location = route.location;
+    final tabItem = TabItem.values.firstWhere(
+      (tabItem) => location.contains('/${tabItem.name}'),
+      orElse: () => TabItem.red,
+    );
+    return tabItem.index;
+  }
+
+  void _onItemTapped(int index, BuildContext context) {
+    final tabItem = TabItem.values[index];
+    final route = GoRouter.of(context);
+    final location = route.location;
+    if (location == '/${tabItem.name}') {
+      return;
+    }
+    route.go('/${tabItem.name}');
   }
 }

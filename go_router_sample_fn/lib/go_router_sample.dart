@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_router_sample_fn/const/constants.dart';
+import 'package:go_router_sample_fn/const/tab_item.dart';
+import 'package:go_router_sample_fn/presentation/color_detail_page.dart';
+import 'package:go_router_sample_fn/presentation/colors_list_page.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/home_page.dart';
@@ -32,7 +36,7 @@ class _GoRouterSampleState extends State<GoRouterSample> {
   }
 
   final _router = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/${TabItem.red.name}',
     redirect: (context, state) async {
       final isLogin = await context.read<AuthService>().isLogin();
       final loggingIn = state.subloc == '/login';
@@ -41,23 +45,48 @@ class _GoRouterSampleState extends State<GoRouterSample> {
       }
 
       if (loggingIn) {
-        return '/';
+        return '/${TabItem.red.name}}';
       }
+
+      TabItem.values.map((tabItem) {
+        if (state.subloc == '/${tabItem.name}') {
+          try {
+            int.parse(state.params['index']!);
+          } on Exception {
+            return '/${tabItem.name}';
+          }
+        }
+      });
 
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/',
-        pageBuilder: (context, state) => const MaterialPage<HomePage>(
-          child: HomePage(),
-        ),
+      ShellRoute(
+        builder: (context, state, child) => HomePage(child: child),
+        routes: TabItem.values
+            .map(
+              (tabItem) => GoRoute(
+                path: '/${tabItem.name}',
+                builder: (context, state) => ColorsListPage(tabItem: tabItem),
+                routes: materialIndices
+                    .map(
+                      (index) => GoRoute(
+                        path: ':index',
+                        builder: (context, state) => ColorDetailPage(
+                          color: tabItem.color,
+                          title: tabItem.name,
+                          materialIndex: int.parse(state.params['index']!),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            )
+            .toList(),
       ),
       GoRoute(
         path: '/login',
-        pageBuilder: (context, state) => const MaterialPage<HomePage>(
-          child: LoginPage(),
-        ),
+        builder: (context, state) => const LoginPage(),
       ),
     ],
   );

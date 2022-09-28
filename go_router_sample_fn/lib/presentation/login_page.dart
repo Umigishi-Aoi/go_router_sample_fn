@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../const/tab_item.dart';
 import '../service/auth_service.dart';
 
-/// To avoid  "Do not use BuildContexts across async gaps.", 
+/// To avoid  "Do not use BuildContexts across async gaps.",
 /// I use Stateful Widget.
-/// 
+///
 /// "ja"
-/// 
+///
 /// "Do not use BuildContexts across async gaps."を避けるために、
 /// Stateful Widgetを使っています。
 class LoginPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
             if (!mounted) {
               return;
             }
-            context.go('/');
+            context.go('/${TabItem.red.name}');
           },
         ),
       ),

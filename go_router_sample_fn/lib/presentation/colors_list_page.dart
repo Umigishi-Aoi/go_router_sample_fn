@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import '../const/constants.dart';
 import '../const/tab_item.dart';
-import 'color_detail_page.dart';
 
 /// To avoid  "Do not use BuildContexts across async gaps.",
 /// I use Stateful Widget.
@@ -64,14 +63,8 @@ class _ColorsListPageState extends State<ColorsListPage> {
                 ),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<ColorDetailPage>(
-                      builder: (context) => ColorDetailPage(
-                        color: widget.tabItem.color,
-                        title: widget.tabItem.name,
-                        materialIndex: materialIndex,
-                      ),
-                    ),
+                  context.go(
+                    '/${widget.tabItem.name}/$materialIndex',
                   ),
                 },
               ),
