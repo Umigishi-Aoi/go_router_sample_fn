@@ -25,3 +25,9 @@ go_router_sample_fn ディレクトリにはメインのGoRouter を使用した
 ### Video
 
 https://user-images.githubusercontent.com/84505829/192665014-0a2605f3-0a10-4e0d-87cf-97640667750f.mov
+
+### Reference
+
+https://qiita.com/KosukeSaigusa/items/b19ec19379c5a2e4ceb2
+
+https://codewithandrea.com/articles/multiple-navigators-bottom-navigation-bar/
